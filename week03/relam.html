@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // animate
+        //3000px
+        var codeboxList=document.getElementsByClassName("CodeMirror-sizer");
+        console.log(codeboxList)
+        codeboxList=[codeboxList[5]]
+        var item=document.getElementById("aaa");
+        codeboxList=[item]
+        var codeContentList=[]
+
+        for(let i=0;i<codeboxList.length;i++){
+            console.log(codeboxList[i].innerText)
+            let codeContents=codeboxList[i].getElementsByClassName("CodeMirror-line");
+            // let signCodeList=[]
+            let signStr=""
+            for(let i=0;i<codeContents.length;i++){
+                // signCodeList.push(codeContents[i].innerText)
+                signStr+=codeContents[i].innerText
+            }
+            // codeContentList.push(signCodeList)
+
+            codeContentList.push(signStr)
+        }
+        copy(codeContentList[0])
+        
+    </script>
+</body>
+</html>

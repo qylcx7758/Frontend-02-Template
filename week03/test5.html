@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    Realms 抽象出全局环境的概念，有自己的全局对象。 Realms 有什么用处？ 安全隔离； 插件； 浏览器内代码编辑器； 服务端渲染； 每个 Realms 都有自己的全局对象和词法作用域。
+    
+    <script>
+        var set = new Set();
+        var objects = ["eval","isFinite","isNaN","parseFloat","parseInt","decodeURI","decodeURIComponent","encodeURI",
+            "encodeURIComponent","Array","Date","RegExp","Promise","Proxy","Map","WeakMap","Set","WeakSet","Function","Boolean",
+            "String","Number","Symbol","Object","Error","EvalError","RangeError","ReferenceError","SyntaxError","TypeError",
+            "URIError","ArrayBuffer","SharedArrayBuffer","DataView","Float32Array","Float64Array","Int8Array","Int16Array",
+            "Int32Array","Uint8Array","Uint16Array","Uint32Array","Uint8ClampedArray","Atomics","JSON","Math","Reflect"
+        ];
+        // objects.forEach(o => set.add(o));​
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i]
+            /**     * Object.getOwnPropertyNames 找到当前对象所有的属性     * 例：Array 返回  ["length", "name", "prototype", "isArray", "from", "of"]      * String 返回 ["length", "constructor", "anchor", "big", "blink", "bold", "charAt",      *            "charCodeAt", "codePointAt", "concat", "endsWith", "fontcolor", "fontsize",      *            "fixed", "includes", "indexOf", "italics", "lastIndexOf", "link", "localeCompare",      *            "match", "matchAll", "normalize", "padEnd", "padStart", "repeat", "replace",      *            "search", "slice", "small", "split", "strike", "sub", "substr", "substring",      *            "sup", "startsWith", "toString", "trim", "trimStart", "trimLeft", "trimEnd",      *            "trimRight", "toLocaleLowerCase", "toLocaleUpperCase", "toLowerCase", "toUpperCase",      *            "valueOf"]     * Object.getOwnPropertyDescriptor 找到当前对象自身的属性，可能是 访问器属性（getter/setter） 可能是 数据属性     *      * 数据属性有四个特征：     * value：就是属性的值；     * writable：决定属性能否被赋值；     * enumerable：决定 for in 能否枚举该属性；     * configurable：决定该属性能否被删除或者改变特征值。     *      * 访问器属性有四个特征：     * getter：函数或 undefined，在取属性值时被调用；     * setter：函数或 undefined，在设置属性值时被调用；     * enumerable：决定 for in 能否枚举该属性；     * configurable：决定该属性能否被删除或者改变特征值。     *     */
+            for (var p of Object.getOwnPropertyNames(o)) {
+                //Object.getOwnPropertyDescriptor(o,p) 返回自身的属性  
+                var d = Object.getOwnPropertyDescriptor(o, p);
+                //访问器属性 是没有 value 的，value !== null 就是数据属性      
+                if ((d.value !== null && typeof d.value === "object") || (typeof d.value === "function"))
+                    if (!set.has(d.value))
+                        set.add(d.value), objects.push(d.value);
+                if (d.get)
+                    if (!set.has(d.get)) set.add(d.get), objects.push(d.get);
+                if (d.set)
+                    if (!set.has(d.set)) set.add(d.set), objects.push(d.set);
+
+                   
+            }
+        }
+        console.log(d)
+        //问题：set数组里添加的数据，是做什么的？获取的全部都是数据属性么？这些属性有什么作用？有什么共性？可以解决什么问题？  
+    </script>
+</body>
+
+</html>
