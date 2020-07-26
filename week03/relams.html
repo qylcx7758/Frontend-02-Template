@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Animal {
+            constructor(name) {
+                this.name = name
+            }
+            attak() {
+                console.log(this.name + " attaking")
+            }
+
+        }
+
+        class Fish extends Animal {
+            constructor(name) {
+                super(name)
+            }
+            active() {
+                console.log(this.name + " crawl")
+            }
+
+        }
+
+        class Dog extends Animal {
+            constructor(name) {
+                super(name)
+            }
+            active() {
+                console.log(this.name + " swal")
+            }
+            bite(a) {
+                console.log("currshow : " + this.name + "被" + this.name + "攻击了")
+            }
+
+        }
+
+
+
+        let homedog = new Dog("taidi")
+        let fieldfish = new Fish("whale")
+
+        console.log(homedog)
+        console.log(fieldfish)
+
+        homedog.bite(fieldfish)
+
+
+        // let fish={}
+        // fish.attak()
+
+        // let ream1=fish.createContext({x:10,console})
+        // let ream2=fish.createContext({x:20,console})
+
+        // let code=`console.log(x)`
+
+
+        // fish.runInContent(code,ream1)
+        // fish.runInContent(code,ream1)
+    </script>
+</body>
+
+</html>

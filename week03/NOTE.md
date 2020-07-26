@@ -1,10 +1,10 @@
 ## 第三周
 一、运算符和表达式
 
-member运算
+1. member运算
 图片: https://uploader.shimo.im/f/qNXfNI2qEGtqWrQf.png
 
-2.reference
+2. reference
 object:
 key:
 delete:
@@ -25,6 +25,7 @@ conditional: ? :
 
 
 图片: https://uploader.shimo.im/f/QwDsKNmhMeug1Skd.png
+
 二、类型转换
  a+b; == ;a[o]=1
 图片: https://uploader.shimo.im/f/LWtOirWzgEgf87Bv.png
