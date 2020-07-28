@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @description: 查看string中是否存在字段为key的字符串
+         * @param {type} 
+         * @return: 
+         */
+        function match(string, key) {
+            return matchSingleKey(string, 0, key, 0)
+        }
+
+        /**
+         * @description: 递归两个字符串来比较
+         * @param {String} 被寻找的字符串
+         * @param {Number} 被寻找的字符串的下标
+         * @param {String} 需要找到的字符串
+         * @param {Number} 需要找到的字符串的下标
+         * @return: 
+         */
+        function matchSingleKey(str, index1, key, index2) {
+            // 递归string 最左边的值比较最大抵达范围
+            if (index1 >= str.length) {
+                console.log("not find")
+                return false
+            }
+            if (str[index1] === key[index2]) {
+                if (index2 < key.length - 1) {
+                    return matchSingleKey(str, index1 + 1, key, index2 + 1)
+                } else {
+                    // console.log(index1)
+                    console.log("first match subscript:   "+(index1+1-key.length))
+                    //比较到了key值的最右边，返回true
+                    // console.log(key[index2])
+                    return true
+                }
+            } else {
+                return matchSingleKey(str, index1 + 1, key, 0)
+            }
+        }
+       var matchResult= match("3ab4abcdefg", "abcdefg")
+       console.log(matchResult)
+    </script>
+</body>
+
+</html>
