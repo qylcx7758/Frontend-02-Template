@@ -92,6 +92,7 @@ function staticResHandler(localPath, ext, response) {
             response.writeHead(500, { "Content-Type": "text/plain" });
             response.end("Server Error:" + error);
         } else {
+            console.log(response)
             response.writeHead(200, { "Content-Type": getContentTypeByExt(ext) });
             response.end(file, "binary");
         }
