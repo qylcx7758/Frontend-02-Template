@@ -1,30 +1,3 @@
-/*
- * @Author: qiuyiliang
- * @Date: 2020-07-28 21:28:30
- * @LastEditTime: 2020-07-29 15:59:42
- * @LastEditors: qiuyiliang
- * @Description: 
- */
-// const http = require('http')
-
-// http.createServer((request, response) => {
-//     let body = []
-//     request.on('error', (err) => {
-//         console.error(err)
-//     }).on('data', (chunk) => {
-//         body.push(chunk.toString())
-//     }).on('end', () => {
-//         body = Buffer.concat(body).toString()
-//         console.log('body:', body)
-//         response.writeHead(200, {
-//             'Content-Type': 'text/html'
-//         })
-//         response.end('<html><div>hello</div></html> ')
-
-//     })
-// }).listen(8088)
-
-// console.log('server started')
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
@@ -119,6 +92,7 @@ function staticResHandler(localPath, ext, response) {
             response.writeHead(500, { "Content-Type": "text/plain" });
             response.end("Server Error:" + error);
         } else {
+            console.log(response)
             response.writeHead(200, { "Content-Type": getContentTypeByExt(ext) });
             response.end(file, "binary");
         }
