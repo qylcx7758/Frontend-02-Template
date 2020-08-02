@@ -49,6 +49,7 @@ function emit(token) {
         if (top.tagName != token.tagName) {
             throw new Error("Tag start end doesn't match")
         } else {
+            //遇到style标签，添加css规则
             stack.pop()
         }
 
