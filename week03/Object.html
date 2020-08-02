@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>object 对象的使用</title>
+</head>
+
+<body>
+    <script>
+        function doSomething() {}
+        doSomething.prototype.foo = "bar";
+        console.log(doSomething.prototype); //{foo："bar",construvtor:function doSomething(),_proto_}
+        console.log(doSomething.foo) //undefined
+
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
+
+        //算法、工程、
+        var pnode={
+            a:1,
+            b:2
+        }
+        var bnode=Object.create(pnode)
+
+        bnode.a=3;
+        console.log(bnode)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>intrinsicObject</title>
+</head>
+<body>
+    intrinsicObject
+    ECMA 标准为我们提供了一份固有对象表，里面含有 150+ 个固有对象。但是这并不完整，实际上有441个。
+
+获取到这441个固有对象的思路是，我们先去 JavaScript 标准中，找到全部的对象定义。JavaScript 语言规定了全局对象的属性。
+    <script>
+        //Set对象是值的集合，你可以按照插入的顺序迭代它的元素。 Set中的元素只会出现一次，即 Set 中的元素是唯一的。
+        var set=new Set()
+        // var object=["eval","parseInt","Array","JSON"]
+        //undefined 和 null  没有
+        var arr=[eval,parseInt,Object,String,Boolean,Array,JSON,Symbol,Number,Function]
+        
+        // object.forEach(item=>set.add(item))
+        //将上述全部对象，以对象的形式添加到 Set内
+        arr.forEach(item=>{
+            console.log(item)
+            set.add(item)
+        })
+        // console.log(set)
+
+        for(var i=0;i<arr.length;i++){
+            var item=arr[i]
+            for(var prop of Object.getOwnPropertyNames(item)){
+                console.log(item+"  --> "+prop)
+                var desc=Object.getOwnPropertyDescriptor(item,prop);
+                console.log(desc)
+            }
+        }
+        // console.log(Object.getOwnPropertyNames(list))
+
+        //getOwnPropertyNames   //不获取原型链上的属性
+        // Object.getOwnPropertyNames()方法返回一个由指定对象的所有自身属性的属性名（包括不可枚举属性但不包括Symbol值作为名称的属性）组成的数组。
+        //getOwnPropertyDescriptor  
+        //Object.getOwnPropertyDescriptor() 方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性）
+// [[Entries]]
+// 0: "eval"
+// value: "eval"
+// 1: "parseInt"
+// 2: "Array"
+// 3: "JSON"
+
+//
+// [[Entries]]
+// 0: function eval() { [native code] }
+// 1: function parseInt() { [native code] }
+// 2: function Array() { [native code] }
+// 3: JSON
+    </script>
+</body>
+</html>
