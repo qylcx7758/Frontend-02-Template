@@ -10,7 +10,6 @@
 function doSelectorList(selectorList) {
     var resultArr=[]
     for (let i = 0; i < selectorList.length; i++) {
-        // console.log(selectorList[i])
         resultArr=specificity(selectorList[i])
         // resultArr.push(specificity(selectorList[i]))
     }
@@ -39,19 +38,15 @@ function specificity(selector) {
             case "#":
                 //二元数组，内部需再做计算
                  p[1].push(sonSpecificity(part))
-                // p[1]=sonSpecificity(part)
                 break;
             case ".":
                 p[2].push(sonSpecificity(part))
                 break;
             default:
-                // p[3] = sonSpecificity(part)
                 p[3].push(sonSpecificity(part))
-
                 break;
         }
     }
-    // console.log(p)
     return p
 }
 
@@ -62,18 +57,13 @@ function specificity(selector) {
  */
 function sonSpecificity(selectorSon) {
     var p = [0, 0, 0, 0]
-    // console.log(selectorSon)
-    // var selectorParts = selectorSon.split(" ")
     var re = /(\.)|(\#)|(\>)|(\+)/g
     var str1 = selectorSon.replace(re, function (match, p1, p2, p3, p4) {
         return " " + match
     })
-    // var isTest=re.test(selectorSon)
-    // console.log(isTest)
     //去除首项的空字符
     var selectorParts = str1.trim().split(" ")
     for (var part of selectorParts) {
-        // console.log(part)
         switch (part[0]) {
             case "#":
                 p[1] += 1
@@ -91,7 +81,6 @@ function sonSpecificity(selectorSon) {
 
 }
 
-// console.log(specificity(selector))
 var selector1 = ".a #b div"
 // var selector2 = ".g>.a.c #b.d div "
 var selector3 = ".a.c #b.d div.e #b .a.g#f"
