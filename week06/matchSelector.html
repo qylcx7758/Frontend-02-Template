@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>复合选择器</title>
     <style>
     </style>
 </head>
@@ -13,26 +13,33 @@
 <body>
 
     <div class="a b" id="box">
-        <p id="id" class="class">12345</p>
+        <p id="id" class="class">第一个选择</p>
     </div>
+
+    <span class="h j">
+    <div class="a b c e" id="d">
+        <h1 class="a c f g" id="id2">
+                第二个选择
+        </h1>
+    </div>
+</span>
     <script>
         /**
          * @description: 匹配复合选择器用空格连接的复杂选择器
-         * 没有包含伪类选择器，伪元素选择器， >,~,+,||的复杂选择器
+         * 没有考虑伪类选择器，伪元素选择器， >,~,+,||的复杂选择器的情况
          * @param {type} 
          * @return: 
          */
         function match(selector, element) {
-            let selectorList=selector.split(" ");
-            let isMatch=true 
+            let selectorList = selector.split(" ");
+            let isMatch = true
             console.log(selectorList)
-            for(let i=selectorList.length-1;i>=0;i--){
-                console.log(selectorList[i])
-                let item=selectorList[i]
+            for (let i = selectorList.length - 1; i >= 0; i--) {
+                let item = selectorList[i]
                 //有多少个parent的层级，0代表最后匹配到但当前元素
-                let index=selectorList.length-1-i;
-                if(!matchItem(item,element,index)){
-                    isMatch=false
+                let index = selectorList.length - 1 - i;
+                if (!matchItem(item, element, index)) {
+                    isMatch = false
                     break
                 }
             }
@@ -40,35 +47,101 @@
         }
 
         /**
-         * @description: 匹配每一个元素与单个复合选择器
+         * @description: 匹配每一个元素与数组内的复合选择器
          * @param {type} 
          * @return: 
          */
-        function matchItem(simpleSelcetor,element,index){
-            if(index){
-                
-            }else{
-                let classlist=element.classlist;
-                let _id=element.id;
-                let _tagname=element.tagName;
-
-            }   
+        function matchItem(simpleSelcetor, element, index) {
+            let isMatch = true
+            //递归获取父级
+            let i = 0
+            let target = element;
+            while (i < index) {
+                target = target.parentNode
+                if (!target) {
+                    return false
+                }
+                // console.log(target)
+                i++;
+            }
+            isMatch = matchSelector(simpleSelcetor, target)
+            return isMatch
         }
         /**
-         * @description: 匹配复合选择器
-         * @param {type} 
-         * @return: 
+         * @description: 将元素与复合选择器匹配
+         * @param {string} simpleSelcetor：复杂选择器
+         * @param {Object} element : 需要匹配的元素
+         * @return: 返回元素是否与单个复杂选择器匹配的布尔值
          */
-        var selector="div.a.b.c#d"
-        matchSelector(selector)
-        function matchSelector(selector,ele){
-            let re=/(\w+)|(\.\w+)|(\#\w+)/g
-            console.log(re.test(selector))
-            console.log(selector.match(re))
-            let arr=selector.match(re)
+        function matchSelector(simpleSelcetor, element) {
+            let selectorObj = getSeletor(simpleSelcetor)
+            console.log(selectorObj)
+            let _classlist = element.classList;
+            let _id = element.id;
+            let _tagname = element.tagName;
+            let getClassResult = true;
+            let getTagnameResult = true;
+            let getIdResult = true
+            for (let i in selectorObj._classList) {
+                if (Array.from(_classlist).indexOf(selectorObj._classList[i]) === -1) {
+                    getClassResult = false
+                    break;
+                }
+            }
+            if (selectorObj._id && selectorObj._id !==  _id) {
+                getIdResult = false
+            }
+            if (selectorObj._tagname && selectorObj._tagname !== (_tagname).toLowerCase()) {
+                getTagnameResult = false
+            }
+
+            if (getClassResult && getIdResult && getTagnameResult) {
+                return true
+            } else {
+                return false
+            }
         }
 
+        // var selector = "div.a.b.c#d"
+        // console.log(getSeletor(selector))
+        /**
+         * @description: 获取单个复杂选择器的class,标签名，class集合，返回class 。ID 元素选择器的对象
+         * @param {type} 
+         * @return:  {_classList: [".a", ".b", ".c"],_id: "#d",_tagname: "div"}
+         */
+        function getSeletor(selector) {
+            let re = /(\w+)|(\.\w+)|(\#\w+)/g
+            let arr = selector.match(re)
+            let _classList = []
+            let _tagname = ""
+            let _id = ""
+            for (let i in arr) {
+                switch (arr[i][0]) {
+                    case ".":
+                        _classList.push(arr[i].substring(1))
+                        break;
+                    case "#":
+                        _id = arr[i].substring(1)
+                        break;
+                    default:
+                        //统一转小写
+                        _tagname = arr[i].toLowerCase()
+                        break;
+                }
+            }
+            return {
+                _classList,
+                _tagname,
+                _id
+            }
+        }
+
+        // expect
         console.log(match("div #id.class", document.getElementById("id")));
+        //expect true
+        console.log(match("span.h.j .a.b#d.e h1.a.g#id2", document.getElementById("id2")));
+        // expect false
+        console.log(match("span.h.j .a.b.k#d.e h1.a.g#id2", document.getElementById("id2")));
     </script>
 </body>
 
