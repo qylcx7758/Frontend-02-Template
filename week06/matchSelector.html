@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+
+<body>
+
+    <div class="a b" id="box">
+        <p id="id" class="class">12345</p>
+    </div>
+    <script>
+        /**
+         * @description: 匹配复合选择器用空格连接的复杂选择器
+         * 没有包含伪类选择器，伪元素选择器， >,~,+,||的复杂选择器
+         * @param {type} 
+         * @return: 
+         */
+        function match(selector, element) {
+            let selectorList=selector.split(" ");
+            let isMatch=true 
+            console.log(selectorList)
+            for(let i=selectorList.length-1;i>=0;i--){
+                console.log(selectorList[i])
+                let item=selectorList[i]
+                //有多少个parent的层级，0代表最后匹配到但当前元素
+                let index=selectorList.length-1-i;
+                if(!matchItem(item,element,index)){
+                    isMatch=false
+                    break
+                }
+            }
+            return isMatch;
+        }
+
+        /**
+         * @description: 匹配每一个元素与单个复合选择器
+         * @param {type} 
+         * @return: 
+         */
+        function matchItem(simpleSelcetor,element,index){
+            if(index){
+                
+            }else{
+                let classlist=element.classlist;
+                let _id=element.id;
+                let _tagname=element.tagName;
+
+            }   
+        }
+        /**
+         * @description: 匹配复合选择器
+         * @param {type} 
+         * @return: 
+         */
+        var selector="div.a.b.c#d"
+        matchSelector(selector)
+        function matchSelector(selector,ele){
+            let re=/(\w+)|(\.\w+)|(\#\w+)/g
+            console.log(re.test(selector))
+            console.log(selector.match(re))
+            let arr=selector.match(re)
+        }
+
+        console.log(match("div #id.class", document.getElementById("id")));
+    </script>
+</body>
+
+</html>
