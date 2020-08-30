@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>红绿灯</title>
+    <style>
+        .radio {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+            float: left;
+            border: 1px solid blue;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="radio red"></div>
+    <div class="radio green"></div>
+    <div class="radio yellow"></div>
+    <script>
+        // let red
+        let time = 0;
+        let showColor = "red"
+
+        whileTime()
+        function whileTime() {
+            let timer = setTimeout(() => {
+                clearTimeout(timer)
+                time++;
+                let result = time % 17;
+
+                if (result >= 0 && result < 10) {
+                    showColor = "red"
+                } else if (result >= 10 && result < 15) {
+                    showColor = "green"
+                } else if (result >= 15 && result<17) {
+                    showColor = "yellow"
+                }
+                console.log("time:"+timer+",currColor >>>>" +showColor)
+                whileTime()
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
