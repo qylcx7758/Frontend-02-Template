@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #board {
+            width: 300px;
+            height: 300px;
+            box-sizing: border-box;
+            background-color: silver;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            font-size: 80px;
+            box-sizing: border-box;
+            border: 1px solid white;
+            background-color: green;
+            color: red;
+            display: inline-block;
+            /* float: left; */
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="board"></div>
+    <script>
+        //用1维数组也能表示
+        let pattern = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        //谁在下棋
+        let whoMove = 1
+
+        function show(pattern) {
+            pattern=pattern?pattern:window.pattern
+            let board = document.getElementById("board")
+            board.innerHTML = ""
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    // if()
+                    let cell = document.createElement("div")
+                    cell.classList.add("cell")
+                    if (pattern[i][j] === 2) {
+                        cell.innerText = "×"
+                    } else if (pattern[i][j] === 1) {
+                        cell.innerText = "●"
+                    }
+                    cell.addEventListener("click",()=>{
+                        userMove(i,j)
+                    })
+                    board.appendChild(cell)
+                }
+            }
+        }
+
+        /**
+         * @description: 交换玩家 p1p2的下棋
+         * @param {type} 
+         * @return {type} 
+         */
+        function userMove(i,j){
+            if(pattern[i][j]>0){
+                return
+            }
+       
+            pattern[i][j]=whoMove
+            if(check(pattern,whoMove)){
+                console.log("p"+whoMove+"--->: win!")
+            }
+            whoMove=3-whoMove;
+
+            show(pattern)
+
+            if(willWin(pattern)){
+                console.log("p"+whoMove+": will win!")
+            }
+            computeMove(pattern)
+            // console.log(bestChoice(pattern))
+        }
+        /**
+         * @description: 执行Ai行走
+         * @param {type} 
+         * @return {type} 
+         */
+        function computeMove(pattern){
+            let choice=bestChoice(pattern,whoMove)
+            if(choice.point)
+                pattern[choice.point[0]][choice.point[1]]=whoMove
+            if(check(pattern,whoMove))
+                alert("p"+whoMove+":--> is winner")
+            
+            whoMove=3-whoMove
+            console.log(whoMove)
+            show(pattern)
+        }
+        /**
+         * @description: 检查是否胜利
+         * @param {type} 
+         * @return {type} 
+         */
+        function check(pattern,whoMove){
+            // 检查横行
+            for(let j=0;j<3;j++){
+                let win=true
+                for(let i=0;i<3;i++){
+                    if(pattern[j][i]!==whoMove){
+                        win=false
+                    }
+                }
+                if(win){
+                    return true
+                }
+            }
+            // 检查纵行
+            for(let i=0;i<3;i++){
+                let win=true
+                for(let j=0;j<3;j++){
+                    if(pattern[j][i]!==whoMove){
+                        win=false
+                    }
+                }
+                if(win){
+                    return true
+                }
+            }
+            //设置块级作用域
+            {
+                let win=true;
+                for(let i=0;i<3;i++){
+                    if(pattern[i][i]!==whoMove){
+                        win=false
+                    }
+                }
+                if(win){
+                    return true
+                }
+            }
+            {
+                let win=true;
+                for(let i=0;i<3;i++){
+                    if(pattern[i][2-i]!==whoMove){
+                        win=false
+                    }
+                }
+                if(win){
+                    return true
+                }  
+            }
+
+            return false
+        }
+
+        function clone(pattern){
+            return JSON.parse(JSON.stringify(pattern))
+            
+            //如果是一维数组，可以利用这个方法来克隆，这种克隆能节省很多内存空间
+            // return Object.create(pattern)
+        }
+        /**
+         * @description: 循环去下每一个空格，对下完空格后，再执行一遍检查
+         * @param {type} 
+         * @return {type} 
+         */
+        function willWin(pattern,whoMove){
+            for(let i=0;i<3;i++){
+                for(let j=0;j<3;j++){
+                   let tmp=clone(pattern)
+                    if(pattern[i][j]>0){
+                        continue
+                    }   
+                    tmp[i][j]=whoMove;
+                    if(check(tmp,whoMove)){
+                        // console.log([i,j])
+                        return [i,j]
+                    }
+                }
+            }
+            return null
+        }
+
+        /**
+         * @description:
+         * @param {type} 
+         * @return {Object} 坐标 
+         * @return {Number} 结果 
+         */
+        function bestChoice(pattern,whoMove){
+            let p;
+            if(p=willWin(pattern,whoMove)){
+                return {
+                    point:p,
+                    result:1
+                }
+            }
+
+            let result=-2;
+            let point=null;
+            outer: for(let i=0;i<3;i++){
+                for(let j=0;j<3;j++){
+                    if(pattern[i][j]){
+                        continue
+                    }
+                    let tmp=clone(pattern)
+                    tmp[i][j]=whoMove;
+                    
+                    //递归 留给对方一个最差局面
+                    //不懂
+                    let r=bestChoice(tmp,3-whoMove).result;
+                    if(-r > result){
+                        result=-r;
+                        point=[i,j]
+                    }
+                    if(result===1){
+                        //break 两层循环
+                        break outer
+                    }
+                }
+            }
+            return {
+                point:point,
+                result:point?result:0
+            }
+        }
+        show(pattern)
+    </script>
+</body>
+
+</html>
