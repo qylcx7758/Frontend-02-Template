@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" title="x" href="data:text/css,p%7Bcolor:blue%7D">
+    <link rel="stylesheet" href="./test.css">
+</head>
+<body>
+    <div class="testdiv">testdiv</div>
+    <p>od p</p>
+    <script>
+        // data url可以访问 
+        console.log(document.styleSheets)
+        let op=document.getElementsByTagName("p")[0]
+        let pCss=window.getComputedStyle(op)
+        console.log(pCss)
+        console.log(pCss.color)
+    </script>
+</body>
+</html>
