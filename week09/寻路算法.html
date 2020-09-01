@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寻路搜索</title>
+
+    <style>
+        .cell {
+
+            display: inline-block;
+
+            width: 6px;
+
+            height: 6px;
+
+            background-color: grey;
+
+            border-bottom: 1px solid #fff;
+
+            border-right: 1px solid #fff;
+
+            vertical-align: top;
+
+        }
+
+        .black {
+            background-color: #000;
+        }
+
+        #container {
+
+            line-height: 7px;
+            /* box-sizing: border-box; */
+            border: 1px solid red;
+            width: 701px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    ​
+    <button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+    ​
+    <script>
+        let map = localStorage['map'] ? JSON.parse(localStorage['map']) : Array(10000).fill(0)
+        let container = document.getElementById('container')
+        console.time("start creat map")
+        let frag = document.createDocumentFragment()
+        // 100* 100  一维数组表示二位数组
+        for (let y = 0; y < 100; y++) {
+            for (let x = 0; x < 100; x++) {
+                let cell = document.createElement("div")
+                cell.classList.add("cell")
+                if (map[y * 100 + x] === 1) {
+                    cell.classList.add("black")
+                }
+                cell.addEventListener("mousemove", (event) => {
+                    if (mousedown) {
+                        if (clear) {
+                            map[y * 100 + x] = 0
+                            cell.classList.remove("black")
+                        } else {
+                            map[y * 100 + x] = 1
+                            cell.classList.add("black")
+                        }
+                    }
+                })
+                //分别append与fragment 60ms
+                // container.appendChild(cell)
+                //花费时间差不多
+                frag.appendChild(cell)
+            }
+        }
+        container.appendChild(frag)
+        console.timeEnd("start creat map")
+        let mousedown = false
+        let clear = false
+        document.addEventListener("mousedown", e => {
+            mousedown = true
+            // console.log("mousedown")
+            clear = (e.which === 3)
+        })
+
+        document.addEventListener("contextmenu", e => {
+            // 同时出发mousedown
+            console.log("contextmenu")
+            e.preventDefault()
+        })
+
+        document.addEventListener("mouseup", e => {
+            clear = false;
+            mousedown = false
+        })
+
+        /**
+         * @description: 搜索，设置quene or stack 的数据模型
+         * @param {type} 
+         * @return {type} 
+         */
+        async function path(map, start, end) {
+            console.time("go start")
+            //不同搜索算法的灵魂
+            //改成：push/shift、shit/pop 队列   （广度优先搜索）
+            //改成：pop/push 栈  （深度优先搜索）
+            var quene = [start] //数据结构
+            async function insert(x, y) {
+                if (x < 0 || x >= 100 || y < 0 || y >= 100) return;
+                //有墙 不找
+                if (map[y * 100 + x]) return;
+                container.children[y * 100 + x].style.backgroundColor = "lightgreen"
+                await sleep(30)
+                //是一个新节点，打个标记，已经找过的点，不重复找
+                map[y * 100 + x] = 2
+                //这个点入队
+                quene.push([x, y])
+            }
+
+
+            while (quene.length) {
+                // 广度优先搜索： shift 寻找第一项相关联的项与清除原数组第一个项，直到数组清空
+                // 深度优先搜索： pop 寻找每次找到的最后一项相关联的项，并每次都是寻找和删除 新找到的最后一项
+                let [x, y] = quene.shift()
+                //耗时比较多 [1,1].[30,30]  ==>带console.log耗时 64744毫秒
+                // 不带console.log 耗时 64945
+                // console.log(x,y)
+                if (x === end[0] && y === end[1]) {
+                    console.timeEnd("go start")
+                    return true
+                }
+                // async 内所有的函数想异步调用，需要用await
+                await insert(x - 1, y)
+                await insert(x + 1, y)
+                await insert(x, y + 1)
+                await insert(x, y - 1)
+            }
+        }
+
+        /**
+         * @description: 异步
+         * @param {type} 
+         * @return {type} 
+         */
+        function sleep(t) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, t);
+            })
+        }
+
+
+        /**
+         * @description: 排好序的数据结构，保证拿出来的时候是最小的
+         * 每次都少挪到数组的元素
+         * @param {type} 
+         * @return {type} 
+         */
+        class Sorted {
+            //data原始数据
+            //compare 排序算法
+            constructor(data, compare) {
+                this.data = data.slice()
+                this.compare = compare || ((a, b) => a - b)
+            }
+            take() {
+                if (!this.data.length) return;
+                let min = this.data[0]
+                let minIndex = 0;
+
+                for (let i = 1; i<this.data.length; i++) {
+                    // console.log(this.data[i])
+                    if (this.compare(this.data[i], min) < 0) {
+                        min = this.data[i]
+                        minIndex = i
+                    }
+                }
+                //互调位置，如果用splice的话，会让后面的元素往前挪，所以会是O(N)，不希望一个O(N)的写操作，希望是一个O(1)的操作
+                this.data[minIndex] = this.data[this.data.length - 1]
+                this.data.pop()
+                return min
+            }
+        
+            give(b) {
+                this.data.push(v)
+            }
+        }
+   
+    </script>
+
+</body>
+
+</html>
