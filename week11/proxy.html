@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy</title>
+</head>
+<body>
+    <script>
+        let obj={
+            a:1,
+            b:2
+        }
+
+        // let po=new Proxy(obj,{
+        //     set(obj,prop,val){
+        //         console.log(obj,prop,val)
+        //     }
+        // })
+
+        let po=reactive(obj)
+
+        //通过proxy 和promise类似，通过函数返回
+        /**
+         * @description: 实现po对obj的一个简单的代理，完整的需要把所有hook补全
+         * @param {type} 
+         * @return {type} 
+         */
+        function reactive(object){
+            return new Proxy(object,{
+                set(obj,prop,val){
+                    //操作修改object;如果不加这步骤，实际上不会影响object,
+                    obj[prop]=val;
+                    console.log(obj,prop,val)
+                },
+                get(obj,prop,val){
+                    console.log(obj,prop,val)
+                    return obj[prop]
+                }
+            })
+        }
+    </script>
+    
+</body>
+</html>
