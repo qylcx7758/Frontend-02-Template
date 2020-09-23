@@ -15,7 +15,9 @@ module.exports ={
                     //一层一层配,用的包
                     options:{
                         presets:["@babel/preset-env"],
-                        plugins:["@babel/plugin-transform-react-jsx"]
+                        // plugins:["@babel/plugin-transform-react-jsx"]
+                        plugins:[["@babel/plugin-transform-react-jsx",{pragma:"createElement"}]]   //打包后文件内的react.createElement变成 creatElement
+
                     }
                 }
             }]

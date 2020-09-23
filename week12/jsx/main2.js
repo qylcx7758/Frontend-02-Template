@@ -23,7 +23,7 @@ function createElement(type,attributes,...children){
     let element;
     if(typeof type==="string"){
         //原生的情况
-        element=  new ElementWrapper(type)
+        element=  document.createElement(type)
     }else{
         element=new type;
     }
@@ -32,31 +32,14 @@ function createElement(type,attributes,...children){
     }
     for(let child of children){
         if(typeof child==="string"){
-            child=new TextWrapper(child)
+            child=document.createTextNode(child)
         }
         element.appendChild(child)
     }
     return element
 }
 
-class TextWrapper{
-    constructor(content){
-        this.root=document.createTextNode(content)
-    }
-    setAttribute(name,value){
-        this.root.setAttribute(name,value)
-    }
-    appendChild(child){
-        // this.root.appendChild(child)
-        child.mountTo(this.root)
-    }
-    mountTo(parent){
-        parent.appendChild(this.root)
-    } 
-}
-
-
-class ElementWrapper{
+class elementWrapper{
     constructor(type){
         this.root=document.createElement(type)
     }
