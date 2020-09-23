@@ -1,6 +1,18 @@
+/*
+ * @Author: qiuyiliang
+ * @Date: 2020-09-19 20:40:33
+ * @LastEditTime: 2020-09-23 21:37:13
+ * @LastEditors: qiuyiliang
+ * @Description: jsx 基本使用方法
+ */
+
+
 for(let i of [1,2,3]){
     console.log(i)
 }
+
+
+
 
 //需要先支持 jsx,加关键包 npm install ==save=dev @babel/plugin-transform-react-jsx  
 // 默认这里会被翻译成一个react 的函数应用
@@ -77,7 +89,7 @@ class ElementWrapper{
  * @param {type} 
  * @return {type} 
  */
-class Div{
+class Test{
     constructor(){
         this.root=document.createElement("div")
     }
