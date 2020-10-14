@@ -215,8 +215,7 @@ export class Recognizer {
 
 let log = null;
 
-void
-function () {
+void function () {
     let allowLog = false
     if (allowLog) {
         log = console.log;
@@ -224,6 +223,7 @@ function () {
         log = function () {}
     }
 }();
+
 export function enableGesture(element) {
     new Listener(element, new Recognizer(new Dispatcher(element)))
 }
