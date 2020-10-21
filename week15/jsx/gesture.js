@@ -33,6 +33,7 @@ export class Listener {
                 while (button <= event.buttons) {
                     if (button & event.buttons) {
                         let key;
+                        // 调整中键和右键的顺序
                         if (button === 2) {
                             key = 4;
                         } else if (button === 4) {
@@ -63,6 +64,8 @@ export class Listener {
             if (!isListeningMouse) {
                 document.addEventListener("mousemove", mousemove);
                 document.addEventListener("mouseup", mouseup);
+                isListeninMouse = true;
+
             }
         });
 
@@ -70,6 +73,7 @@ export class Listener {
             // log("start  ---")
             // touch start 后 触发move
             for (let touch of event.changedTouches) {
+                //log(touch.clientX, touch.clientY)
                 let context = Object.create(null);
                 contexts.set(touch.identifier, context);
                 recognizer.start(touch, context);
@@ -176,6 +180,7 @@ export class Recognizer {
         if (!context.points.length) {
             v = 0;
         } else {
+            //距离
             d = Math.sqrt((point.clientX - context.points[0].x) ** 2 +
                 (point.clientY - context.points[0].y) ** 2);
             v = d / (Date.now() - context.points[0].t);
@@ -189,7 +194,7 @@ export class Recognizer {
                 clientY: point.clientY,
                 isVertical: context.isVertical,
                 isFlick: context.isFlick,
-                velocity: v
+                velocity: v  //speed
             });
         } else {
             context.isFlick = false;
@@ -210,6 +215,7 @@ export class Recognizer {
     cancel(point, context) {
         clearTimeout(context.handler);
         this.dispatcher.dispatch("cancel", {});
+        // log('cancel', point.clientX, point.clientY);
     }
 };
 

@@ -1,24 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  entry: './animation-demo.js',
-
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js'
-  },
-
-  mode: 'development',
-
-  devtool: 'sourcemap',
-
-  devServer: {
-    contentBase: './dist',
-    publicPath: '/',
-    port: 3000,
-    open: true
-  },
-
+  entry: "./main.js",
   module: {
     rules: [{
       test: /\.js$/,

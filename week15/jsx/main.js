@@ -1,29 +1,38 @@
-import {
-  Component,
-  createElement
-} from "./framework.js";
-import {
-  Carousel
-} from "./Carousel.js";
-import {
-  Timeline,
-  Animation
-} from "./animation-1.js";
-const images = [
-  "https://static001.geekbang.org/resource/image/88/f1/8807661ef5b82fcb75e8b8f2dbd71ef1.jpg",
-  "https://static001.geekbang.org/resource/image/67/00/67a1eac2683d27a798144e01a3097900.jpg",
-  "https://static001.geekbang.org/resource/image/7a/30/7a9547384cffa039f063db1fc7669a30.jpg",
-  "https://static001.geekbang.org/resource/image/82/af/823ef28a64096b4ffce19bca16a573af.jpg"
-]
+import {createElement} from "./framework.js"
+import {Carsousel} from "./Carousel.js"
+import {Button} from "./Button.js"
+import {List} from "./List.js"
 
-const a = < Carousel src = {
+let cats = [
+  {
+      url: 'https://static001.geekbang.org/resource/image/d8/32/d846f329e073d0f7c8143da32a3ca832.jpg', 
+      title: '白猫'
+  }, 
+  {
+      url: 'https://static001.geekbang.org/resource/image/b4/26/b4ff997b68f16f882c255aef8c833626.jpg',
+      title: '黄猫'
+  }, 
+  {
+      url: 'https://static001.geekbang.org/resource/image/51/c0/5196d9fb7fcbbfb43450624045ae81c0.jpg', 
+      title: '灰白猫'
+  }, 
+  {
+      url: 'https://static001.geekbang.org/resource/image/97/bf/97fbdb46b8ad6550dcdb4aa4a062f0bf.jpg', 
+      title: '黄白猫'
+  }
+]
+//模板
+let a = <List data={cats}>{(record) =>
+	<div>
+		<img src={record.img} />
+		<a href={record.url}>{record.title}</a>
+	</div>
+}
+</List>
+
+let carousel = < Carousel src = {
   images
 }
 />
-a.mountTo(document.body)
+carousel.mountTo(document.body)
 
-let timLime = new Timeline()
-window.timLime = timLime
-window.animation = new Animation({}, 'a', 0, 100, 1000, null)
-
-timLime.start()
