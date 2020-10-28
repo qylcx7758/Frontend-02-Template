@@ -14,4 +14,8 @@ npm install yeoman-generator
 package 名字必须 generator开头，不然无法运行
 
 
-4. 通股票命令行和用户交互
+4. 通过命令行和用户交互
+
+
+5. mkdie demo
+demo qylcx$ yo toolchain
