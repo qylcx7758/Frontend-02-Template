@@ -19,3 +19,6 @@ package 名字必须 generator开头，不然无法运行
 
 5. mkdie demo
 demo qylcx$ yo toolchain
+
+## 二、初始化vue的generators
+
